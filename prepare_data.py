@@ -87,7 +87,7 @@ data_tracks.drop(['id_artist'], axis='columns', inplace=True)
 
 data_tracks_to_save = data_tracks[data_tracks['genres'].map(lambda l: len(l)) > 0]
 
-data_tracks_to_save.to_json('prepared_track_data.json', orient='records', lines=True)
+data_tracks_to_save.to_json('prepared_track_data.jsonl', orient='records', lines=True)
 
 labels, values = zip(*genre_counts.items())
 
