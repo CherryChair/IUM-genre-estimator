@@ -47,18 +47,17 @@ for key,value in track_counts.items():
     for artist_genre in artist_genres:
         if artist_genre in genre_counts:
             genre_counts[artist_genre] += value
-            break
 
 
 copy = list(genre_counts.items())
 print(len(genre_counts.items()))
 
 for key, value in copy:
-    if value < 200:
+    if value < 100:
         del genre_counts[key]
 
 
-print(len(genre_counts.items()))
+print(f'genres left after deletion {len(genre_counts.items())}')
 # Przygotowanie danych do wykresu
 
 
@@ -79,8 +78,8 @@ for index, row in data_tracks.iterrows():
         if genre in genre_counts:
             data_tracks.loc[index, "genres"].append(genre)        
 
-print(all_tracks)
-print(sum_tracks)
+# print(all_tracks)
+# print(sum_tracks)
 
 data_tracks.drop(['id_artist'], axis='columns', inplace=True)
 # data_tracks.drop(data_tracks[len(data_tracks['genres']) == 0].index, inplace = True)
@@ -91,7 +90,8 @@ data_tracks_to_save.to_json('prepared_track_data.jsonl', orient='records', lines
 
 labels, values = zip(*genre_counts.items())
 
-print(list(genre_counts.keys()))
+for key in genre_counts.keys():
+    print(key)
 # Tworzenie wykresu
 plt.figure(figsize=(10, 5))
 plt.bar(labels, values)
