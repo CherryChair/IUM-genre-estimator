@@ -164,7 +164,7 @@ for index, row in data_tracks.iterrows():
     most_frequent, count = counter_bucket.most_common(1)[0]
     if genre_in_bucket(most_frequent):
         data_tracks.loc[index, "genre"] = most_frequent
-    i = True
+    # i = True
     # for key, value in counter_bucket.items():
     #     print(cnt)
     #     cnt += 1
@@ -176,8 +176,19 @@ for index, row in data_tracks.iterrows():
     #         new_row['genre'] = key
     #         copy_tracks.loc[len(copy_tracks.index)] = new_row
 
-
+#Pozbywamy się niepotrzebnych kolumn
 data_tracks.drop(['id_artist'], axis='columns', inplace=True)
+
+data_tracks['release_year'] = pd.to_datetime(data_tracks['release_date'], format='mixed').dt.year
+data_tracks.drop('release_date', axis=1, inplace=True)
+data_tracks.drop('acousticness', axis=1, inplace=True)
+data_tracks.drop('instrumentalness', axis=1, inplace=True)
+data_tracks.drop('mode', axis=1, inplace=True)
+data_tracks.drop('loudness', axis=1, inplace=True)
+data_tracks.drop('tempo', axis=1, inplace=True)
+data_tracks.drop('key', axis=1, inplace=True)
+data_tracks.drop('liveness', axis=1, inplace=True)
+data_tracks.drop('time_signature', axis=1, inplace=True)
 # copy_tracks.drop(['id_artist'], axis='columns', inplace=True)
 # data_tracks.drop(data_tracks[len(data_tracks['genres']) == 0].index, inplace = True)
 
