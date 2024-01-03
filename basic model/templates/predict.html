@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Music Genre Prediction</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css" />
   </head>
   <body>
     <h1>Music Genre Prediction Form</h1>
@@ -89,7 +90,7 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            if (data && data.genre) {
+            if (data?.genre) {
               document.getElementById("prediction-result").textContent =
                 "Predicted Genre: " + data.genre;
             } else {
