@@ -1,0 +1,53 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h3 {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
+    max-width: 800px; /* Adjust this value based on your layout needs */
+}
+
+form {
+    width: calc(50% - 20px); /* Adjust the width as necessary, subtracting the margin */
+    margin: 10px;
+}
+
+form label {
+    display: block;
+    margin: 10px 0;
+}
+
+form input, form button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+form button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#prediction-result {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
