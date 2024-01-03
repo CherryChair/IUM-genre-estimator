@@ -179,7 +179,7 @@ for index, row in data_tracks.iterrows():
 #Pozbywamy się niepotrzebnych kolumn
 data_tracks.drop(['id_artist'], axis='columns', inplace=True)
 
-data_tracks['release_year'] = pd.to_datetime(data_tracks['release_date'], format='mixed').dt.year
+data_tracks['release_year'] = pd.to_datetime(data_tracks['release_date']).dt.year
 data_tracks.drop('release_date', axis=1, inplace=True)
 data_tracks.drop('acousticness', axis=1, inplace=True)
 data_tracks.drop('instrumentalness', axis=1, inplace=True)

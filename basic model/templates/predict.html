@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Music Genre Prediction</title>
+  </head>
+  <body>
+    <h1>Music Genre Prediction Form</h1>
+    <form id="prediction-form">
+      <label for="popularity">Popularity:</label>
+      <input
+        type="number"
+        id="popularity"
+        name="popularity"
+        required
+      /><br /><br />
+      <label for="release_year">Release Year:</label>
+      <input
+        type="number"
+        id="release_year"
+        name="release_year"
+        required
+      /><br /><br />
+      <label for="danceability">Danceability:</label>
+      <input
+        type="number"
+        step="0.0001"
+        id="danceability"
+        name="danceability"
+        required
+      /><br /><br />
+      <label for="energy">Energy:</label>
+      <input
+        type="number"
+        step="0.0001"
+        id="energy"
+        name="energy"
+        required
+      /><br /><br />
+      <label for="speechiness">Speechiness:</label>
+      <input
+        type="number"
+        step="0.0001"
+        id="speechiness"
+        name="speechiness"
+        required
+      /><br /><br />
+      <label for="valence">Valence:</label>
+      <input
+        type="number"
+        step="0.0001"
+        id="valence"
+        name="valence"
+        required
+      /><br /><br />
+      <label for="duration_ms">Duration (ms):</label>
+      <input
+        type="number"
+        id="duration_ms"
+        name="duration_ms"
+        required
+      /><br /><br />
+      <label for="explicit">Explicit (0 or 1):</label>
+      <input type="number" id="explicit" name="explicit" required /><br /><br />
+      <button type="submit">Predict Genre</button>
+    </form>
+
+    <div id="prediction-result"></div>
+
+    <script>
+      document.getElementById("prediction-form").onsubmit = function (e) {
+        e.preventDefault();
+        var formData = {
+          popularity: document.getElementById("popularity").value,
+          release_year: document.getElementById("release_year").value,
+          danceability: document.getElementById("danceability").value,
+          energy: document.getElementById("energy").value,
+          speechiness: document.getElementById("speechiness").value,
+          valence: document.getElementById("valence").value,
+          duration_ms: document.getElementById("duration_ms").value,
+          explicit: document.getElementById("explicit").value,
+        };
+        fetch("/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data && data.genre) {
+              document.getElementById("prediction-result").textContent =
+                "Predicted Genre: " + data.genre;
+            } else {
+              document.getElementById("prediction-result").textContent =
+                "Error: Could not predict genre";
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      };
+    </script>
+  </body>
+</html>

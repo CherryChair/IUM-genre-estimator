@@ -12,35 +12,34 @@ def group_int_attrib(attrib_value, step):
     return math.floor(attrib_value/step)
 
 def make_attrib_discrete(attrib_name, attrib_value):
-    match attrib_name:
-        case 'popularity':
-            return group_int_attrib(attrib_value, 10)
-        case 'danceability':
-            return round_attrib(attrib_value, 10)
-        case "energy":
-            return round_attrib(attrib_value, 10)
-        case "key":
-            return attrib_value
-        case "release_year":
-            return group_int_attrib(attrib_value, 1)
-        case "liveness":
-            if attrib_value >= 0.5:
-                return 11
-            return round_attrib(attrib_value, 10)
-        case "speechiness":
-            if attrib_value >= 0.2:
-                return 5
-            return round_attrib(attrib_value, 40)
-        case "tempo":
-            return group_int_attrib(attrib_value, 50)
-        case "time_signature":
-            return attrib_value
-        case "valence":
-            return round_attrib(attrib_value, 10)
-        case "duration_ms":
-            return group_int_attrib(attrib_value, 10000)
-        case "explicit":
-            return attrib_value
+    if attrib_name == 'popularity':
+        return group_int_attrib(attrib_value, 10)
+    elif attrib_name == 'danceability':
+        return round_attrib(attrib_value, 10)
+    elif attrib_name == "energy":
+        return round_attrib(attrib_value, 10)
+    elif attrib_name == "key":
+        return attrib_value
+    elif attrib_name == "release_year":
+        return group_int_attrib(attrib_value, 1)
+    elif attrib_name == "liveness":
+        if attrib_value >= 0.5:
+            return 11
+        return round_attrib(attrib_value, 10)
+    elif attrib_name == "speechiness":
+        if attrib_value >= 0.2:
+            return 5
+        return round_attrib(attrib_value, 40)
+    elif attrib_name == "tempo":
+        return group_int_attrib(attrib_value, 50)
+    elif attrib_name == "time_signature":
+        return attrib_value
+    elif attrib_name == "valence":
+        return round_attrib(attrib_value, 10)
+    elif attrib_name == "duration_ms":
+        return group_int_attrib(attrib_value, 10000)
+    elif attrib_name == "explicit":
+        return attrib_value
 
 attributes = [
     'popularity', 'release_year', 'danceability', 'energy', 'key',
