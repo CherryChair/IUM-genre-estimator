@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from collections import Counter
 from classify_genre import classify_genre, genre_in_bucket
+import sys
 
 
 def load_data():
@@ -37,13 +38,26 @@ def add_genres_to_artists(data_artists, genre_counts):
             data_artists.at[index, "genre"] = most_frequent
     return data_artists
 
+def add_genres_to_artists_complex(data_artists, genre_counts):
+    print('ADDING GENRES TO artists')
+    for index, row in data_artists.iterrows():
+        artist_genres = row['genres']
+        bucket_genres = [genre_counts[artist_genre]
+                         for artist_genre in artist_genres]
+        counter_bucket = Counter(bucket_genres)
+        most_frequent, _ = counter_bucket.most_common(1)[0]
+        if genre_in_bucket(most_frequent):
+            data_artists.at[index, "genre"] = most_frequent
+        data_artists.at[index, "genres"] = bucket_genres
+    return data_artists
 
-def save_prepared_data(data_artists):
+
+def save_prepared_data(data_artists, filename):
     data_artists_to_save = data_artists[data_artists['genre'].map(len) > 0]
     # Reset index to add 'id' field back
     data_artists_to_save.reset_index(inplace=True)
     data_artists_to_save.to_json(
-        'prepared_artist_data.jsonl', orient='records', lines=True)
+        filename, orient='records', lines=True)
     return data_artists_to_save
 
 
@@ -65,8 +79,12 @@ def plot_genre_distribution(data_artists_to_save):
 def main():
     data_artists = load_data()
     genre_counts = bucket_genres(data_artists)
-    data_artists = add_genres_to_artists(data_artists, genre_counts)
-    data_artists_to_save = save_prepared_data(data_artists)
+    if sys.argv[1] == "-c":
+        data_artists = add_genres_to_artists_complex(data_artists, genre_counts)
+        data_artists_to_save = save_prepared_data(data_artists, 'prepared_artist_data_complex.jsonl')
+    else:
+        data_artists = add_genres_to_artists(data_artists, genre_counts)
+        data_artists_to_save = save_prepared_data(data_artists, 'prepared_artist_data.jsonl')
     plot_genre_distribution(data_artists_to_save)
 
 
