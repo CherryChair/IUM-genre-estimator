@@ -56,34 +56,6 @@ for key, value in track_counts.items():
             sum_tracks += value
             break
 
-print('ADDING GENRES TO TRACKS')
-
-# copy_tracks = cp.deepcopy(data_tracks)
-cnt = 0
-for index, row in data_tracks.iterrows():
-    artist_genres = data_artists.loc[row["id_artist"], "genres"]
-    bucket_genres = []
-    for artist_genre in artist_genres:
-        bucket_genres.append(genre_counts[artist_genre])
-    counter_bucket = Counter(bucket_genres)
-    most_frequent, count = counter_bucket.most_common(1)[0]
-    if genre_in_bucket(most_frequent):
-        data_tracks.loc[index, "genre"] = most_frequent
-    # i = True
-    # for key, value in counter_bucket.items():
-    #     print(cnt)
-    #     cnt += 1
-    #     if i and genre_in_bucket(key):
-    #         i = False
-    #         copy_tracks.loc[index, "genre"] = key
-    #     elif genre_in_bucket(key):
-    #         new_row = copy_tracks.loc[index].copy()
-    #         new_row['genre'] = key
-    #         copy_tracks.loc[len(copy_tracks.index)] = new_row
-
-# Pozbywamy się niepotrzebnych kolumn
-data_tracks.drop(['id_artist'], axis='columns', inplace=True)
-
 data_tracks['release_year'] = pd.to_datetime(
     data_tracks['release_date']).dt.year
 data_tracks.drop('release_date', axis=1, inplace=True)
@@ -95,20 +67,45 @@ data_tracks.drop('tempo', axis=1, inplace=True)
 data_tracks.drop('key', axis=1, inplace=True)
 data_tracks.drop('liveness', axis=1, inplace=True)
 data_tracks.drop('time_signature', axis=1, inplace=True)
+
+copy_tracks = cp.deepcopy(data_tracks)
+print('ADDING GENRES TO TRACKS')
+
+cnt = 0
+for index, row in data_tracks.iterrows():
+    artist_genres = data_artists.loc[row["id_artist"], "genres"]
+    bucket_genres = []
+    for artist_genre in artist_genres:
+        bucket_genres.append(genre_counts[artist_genre])
+    i = True
+    print(cnt)
+    cnt += 1
+    for genre in bucket_genres:
+        if i and genre_in_bucket(genre):
+            i = False
+            copy_tracks.loc[index, "genre"] = genre
+        elif genre_in_bucket(genre):
+            new_row = copy_tracks.loc[index].copy()
+            new_row['genre'] = genre
+            copy_tracks.loc[len(copy_tracks.index)] = new_row
+
+# Pozbywamy się niepotrzebnych kolumn
+# data_tracks.drop(['id_artist'], axis='columns', inplace=True)
+
 # copy_tracks.drop(['id_artist'], axis='columns', inplace=True)
 # data_tracks.drop(data_tracks[len(data_tracks['genres']) == 0].index, inplace = True)
 
-data_tracks_to_save = data_tracks[data_tracks['genre'].map(
-    lambda l: len(l)) > 0]
-# copy_tracks_to_save = copy_tracks[copy_tracks['genre'].map(lambda l: len(l)) > 0]
+# data_tracks_to_save = data_tracks[data_tracks['genre'].map(
+#     lambda l: len(l)) > 0]
+copy_tracks_to_save = copy_tracks[copy_tracks['genre'].map(lambda l: len(l)) > 0]
 
-data_tracks_to_save.to_json(
-    'prepared_track_data.jsonl', orient='records', lines=True)
-# copy_tracks_to_save.to_json('prepared_track_data_multiple_genres.jsonl', orient='records', lines=True)
+# data_tracks_to_save.to_json(
+#     'prepared_track_data.jsonl', orient='records', lines=True)
+copy_tracks_to_save.to_json('prepared_track_data_multiple_genres_more.jsonl', orient='records', lines=True)
 
-bucketed_genres_to_count = data_tracks_to_save['genre'].dropna(
-).explode().tolist()
-# bucketed_genres_to_count = copy_tracks_to_save['genre'].dropna().explode().tolist()
+# bucketed_genres_to_count = data_tracks_to_save['genre'].dropna(
+# ).explode().tolist()
+bucketed_genres_to_count = copy_tracks_to_save['genre'].dropna().explode().tolist()
 counted_bucketed_genres = Counter(bucketed_genres_to_count)
 
 labels, values = zip(*counted_bucketed_genres.items())

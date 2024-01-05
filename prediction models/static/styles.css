@@ -44,10 +44,16 @@ form button {
 }
 
 #prediction-result {
-    width: 80%;
+    width: 50%;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
     text-align: center;
+}
+
+#model-choice {
+    width: 50%;
+    margin: 1px auto;
+    text-align: left;
 }

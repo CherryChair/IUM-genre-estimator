@@ -11,11 +11,24 @@
       Fill in all the features of the song or enter only the artist id and click
       the appropriate button.
     </h3>
+    <div id="prediction-result">
+      <p id="result-typehint">The result will appear here.</p>
+    </div>
+    <div id="model-choice">
+      <label for="model">Choose model:</label>
+      <select id="model" name="modellist">
+        <option value="Basic">Basic</option>
+        <option value="Complex">Complex</option>
+      </select>
+    </div>
     <div class="form-container">
       <form id="prediction-form">
-        <label for="popularity">Popularity:</label>
+        <label for="popularity">Popularity (0, 100):</label>
         <input
           type="number"
+          step="1"
+          min="0"
+          max="100"
           id="popularity"
           name="popularity"
           required
@@ -23,6 +36,9 @@
         <label for="release_year">Release Year:</label>
         <input
           type="number"
+          step="1"
+          min="1900"
+          max="2024"
           id="release_year"
           name="release_year"
           required
@@ -97,9 +113,6 @@
         <button type="submit">Predict Genre for Artist</button>
       </form>
     </div>
-    <div id="prediction-result">
-      <p id="result-typehint">The result will appear here.</p>
-    </div>
     <script>
       document.getElementById("prediction-form").onsubmit = function (e) {
         e.preventDefault();
@@ -113,45 +126,83 @@
           duration_ms: document.getElementById("duration_ms").value,
           explicit: document.getElementById("explicit").value,
         };
-        fetch("/predict", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        })
+        model = document.getElementById("model").value
+        if (model === "Basic") {
+          fetch("/predict", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
           .then((response) => response.json())
           .then((data) => {
             if (data?.genre) {
               document.getElementById("prediction-result").textContent =
-                "Predicted Genre: " + data.genre;
+              "Predicted Genre: " + data.genre;
             } else {
               document.getElementById("prediction-result").textContent =
-                "Error: Could not predict genre";
+              "Error: Could not predict genre";
             }
           })
           .catch((error) => console.error("Error:", error));
+        } else if (model === "Complex") {
+          fetch("/predict-complex", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data?.genres) {
+              document.getElementById("prediction-result").textContent =
+              "Predicted Genres: " + data.genres[0] + ", " + data.genres[1];
+            } else {
+              document.getElementById("prediction-result").textContent =
+              "Error: Could not predict genres";
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+        }
       };
-    </script>
+      </script>
 
-    <script>
+<script>
       document.getElementById("artist-prediction-form").onsubmit = function (
         e
       ) {
         e.preventDefault();
         var artistId = document.getElementById("id_artist").value;
-        fetch("/predict/artist/" + artistId)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data?.genre) {
-              document.getElementById("prediction-result").textContent =
-                "Predicted Genre for Artist: " + data.genre;
-            } else {
-              document.getElementById("prediction-result").textContent =
-                "Error: Could not predict genre for artist. Check artist ID.";
-            }
-          })
-          .catch((error) => console.error("Error:", error));
+        model = document.getElementById("model").value
+        if (model === "Basic") {
+          fetch("/predict/artist/" + artistId)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data?.genre) {
+                document.getElementById("prediction-result").textContent =
+                  "Predicted Genre for Artist: " + data.genre;
+              } else {
+                document.getElementById("prediction-result").textContent =
+                  "Error: Could not predict genre for artist. Check artist ID.";
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        } else if (model === "Complex") {
+          fetch("/predict-complex/artist/" + artistId)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data?.genres) {
+                document.getElementById("prediction-result").textContent =
+                  "Predicted Genres for Artist: " + data.genres[0] + ", " + data.genres[1];
+              } else {
+                document.getElementById("prediction-result").textContent =
+                  "Error: Could not predict genres for artist. Check artist ID.";
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        }
       };
     </script>
   </body>
