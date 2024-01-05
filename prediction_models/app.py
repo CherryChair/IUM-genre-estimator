@@ -13,7 +13,9 @@ app = Flask(__name__)
 def load_data():
     df_tracks = pd.read_json('prepared_track_data.jsonl', lines=True)
     df_artists = pd.read_json('prepared_artist_data.jsonl', lines=True)
-    return df_tracks, df_artists
+    df_tracks_complex = pd.read_json('prepared_track_data_complex.jsonl', lines=True)
+    df_artists_complex = pd.read_json('prepared_artist_data_complex.jsonl', lines=True)
+    return df_tracks, df_artists, df_tracks_complex, df_artists_complex
 
 
 def prepare_data(df_tracks):
@@ -33,8 +35,8 @@ def smarter_test_train_split_which_may_distribute_data_of_artists_more_fairly(df
     for genre, genre_tracks in counted_bucketed_genres.items():
         pass
 
-def train_model(X_train, y_train):
-    model = RandomForestClassifier(n_estimators=100)
+def train_model(X_train, y_train, n_estimators):
+    model = RandomForestClassifier(n_estimators=n_estimators)
     model.fit(X_train, y_train)
     return model
 
@@ -66,11 +68,11 @@ def predict_complex():
                   float(data['energy']), float(
                       data['speechiness']), float(data['valence']),
                   float(data['duration_ms']), int(data['explicit'])]
-    prediction_probablities = model.predict_proba([input_data])
+    prediction_probablities = model_complex.predict_proba([input_data])
     two_most_probable = np.argsort(prediction_probablities[0])[::-1][:2]
     print(two_most_probable)
-    genres = [model.classes_[index] for index in two_most_probable]
-    return jsonify({'genres': genres, "prediction_proba": prediction_probablities.tolist(), "classes": model.classes_.tolist()})
+    genres = [model_complex.classes_[index] for index in two_most_probable]
+    return jsonify({'genres': genres})
 
 @app.route('/predict/artist/<id_artist>', methods=['GET'])
 def predict_artist(id_artist):
@@ -93,7 +95,7 @@ def simple_predict_artist(model_simple, id_artist):
     
 @app.route('/predict-complex/artist/<id_artist>', methods=['GET'])
 def predict_artist_complex(id_artist):
-    prediction = complex_predict_artist(model, id_artist)
+    prediction = complex_predict_artist(model_complex, id_artist)
     if prediction is not None:
         return jsonify({'genres': prediction})
     else:
@@ -135,8 +137,8 @@ def get_artists_report_complex():
     y_true = []
     y_pred = []
     for _, artist in df_artists_test.iterrows():
-        prediction = complex_predict_artist(model, artist['id'])
-        if not prediction is not None:
+        prediction = complex_predict_artist(model_complex, artist['id'])
+        if prediction is not None:
             y_true.append(artist['genre'])
             y_pred.append(prediction)
     return my_classification_report_complex(y_true, y_pred)
@@ -152,23 +154,23 @@ def my_classification_report_complex(y_true, y_pred):
             if genre_predicted in genres_true:
                 positives += 1
                 if genre_predicted not in genre_scores:
-                    # genre_scores[genre_predicted] = {"true positive": 1, "false positive": 0, "false negative": 0, "support": 1}
-                    genre_scores[genre_predicted] = {"true positive": 1, "false positive": 0}
+                    # genre_scores[genre_predicted] = {"true_positive": 1, "false_positive": 0, "false negative": 0, "support": 1}
+                    genre_scores[genre_predicted] = {"true_positive": 1, "false_positive": 0}
                 else:
-                    genre_scores[genre_predicted]["true positive"] += 1
-                    genre_scores[genre_predicted]["support"] += 1
+                    genre_scores[genre_predicted]["true_positive"] += 1
+                    # genre_scores[genre_predicted]["support"] += 1
             else:
                 # for genre_true in genres_true:
                 #     if genre_true not in genre_scores:
-                #         genre_scores[genre_true] = {"true positive": 0, "false positive": 0, "false negative": 1, "support": 1}
+                #         genre_scores[genre_true] = {"true_positive": 0, "false_positive": 0, "false negative": 1, "support": 1}
                 #     else:
                 #         genre_scores[genre_true]["false negative"] += 1
                 #         genre_scores[genre_true]["support"] += 1
                 if genre_predicted not in genre_scores:
-                    # genre_scores[genre_predicted] = {"true positive": 0, "false positive": 1, "false negative": 0, "support": 0}
-                    genre_scores[genre_predicted] = {"true positive": 0, "false positive": 1}
+                    # genre_scores[genre_predicted] = {"true_positive": 0, "false_positive": 1, "false negative": 0, "support": 0}
+                    genre_scores[genre_predicted] = {"true_positive": 0, "false_positive": 1}
                 else:
-                    genre_scores[genre_predicted]["false positive"] += 1
+                    genre_scores[genre_predicted]["false_positive"] += 1
         if positives == 2:
             full_positives += 1
         elif positives == 1:
@@ -197,7 +199,7 @@ def get_artists_report_compare():
     y_pred_complex = []
     for _, artist in df_artists_test.iterrows():
         simple_prediction = simple_predict_artist(model, artist["id"])
-        complex_prediction = complex_predict_artist(model, artist["id"])
+        complex_prediction = complex_predict_artist(model_complex, artist["id"])
         if simple_prediction is not None and complex_prediction is not None:
             y_true.append(artist['genre'])
             y_pred_simple.append(simple_prediction)
@@ -223,8 +225,11 @@ def compare_models(y_true, y_pred_simple, y_pred_complex):
     return jsonify({"comparison_report": report})
 
 if __name__ == '__main__':
-    df_tracks, df_artists = load_data()
+    df_tracks, df_artists, df_tracks_complex, df_artists_complex = load_data()
     X_train, X_test, y_train, y_test, features = prepare_data(df_tracks)
-    model = train_model(X_train, y_train)
+    X_train_complex, X_test_complex, y_train_complex, y_test_complex, features_complex = prepare_data(df_tracks_complex)
+    model = train_model(X_train, y_train, 100)
+    model_complex = train_model(X_train_complex, y_train_complex, 100)
     evaluate_model(model, X_test, y_test)
+    evaluate_model(model_complex, X_test_complex, y_test_complex)
     app.run(debug=True)
