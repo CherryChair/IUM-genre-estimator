@@ -38,6 +38,7 @@ def add_genres_to_artists(data_artists, genre_counts):
             data_artists.at[index, "genre"] = most_frequent
     return data_artists
 
+
 def add_genres_to_artists_complex(data_artists, genre_counts):
     print('ADDING GENRES TO artists')
     for index, row in data_artists.iterrows():
@@ -79,12 +80,15 @@ def plot_genre_distribution(data_artists_to_save):
 def main():
     data_artists = load_data()
     genre_counts = bucket_genres(data_artists)
-    if sys.argv[1] == "-c":
-        data_artists = add_genres_to_artists_complex(data_artists, genre_counts)
-        data_artists_to_save = save_prepared_data(data_artists, 'prepared_artist_data_complex.jsonl')
+    if len(sys.argv) > 1 and sys.argv[1] == "-c":
+        data_artists = add_genres_to_artists_complex(
+            data_artists, genre_counts)
+        data_artists_to_save = save_prepared_data(
+            data_artists, 'prepared_artist_data_complex.jsonl')
     else:
         data_artists = add_genres_to_artists(data_artists, genre_counts)
-        data_artists_to_save = save_prepared_data(data_artists, 'prepared_artist_data.jsonl')
+        data_artists_to_save = save_prepared_data(
+            data_artists, 'prepared_artist_data.jsonl')
     plot_genre_distribution(data_artists_to_save)
 
 

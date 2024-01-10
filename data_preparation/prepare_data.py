@@ -89,9 +89,10 @@ def add_genres_to_tracks_complex(data_artists, data_tracks, genre_counts, track_
                 data_tracks.loc[len(data_tracks.index)] = new_row
     return data_tracks
 
+
 def clean_data(data_tracks):
     data_tracks['release_year'] = pd.to_datetime(
-    data_tracks['release_date']).dt.year
+        data_tracks['release_date']).dt.year
     data_tracks.drop('release_date', axis=1, inplace=True)
     data_tracks.drop('acousticness', axis=1, inplace=True)
     data_tracks.drop('instrumentalness', axis=1, inplace=True)
@@ -101,6 +102,8 @@ def clean_data(data_tracks):
     data_tracks.drop('key', axis=1, inplace=True)
     data_tracks.drop('liveness', axis=1, inplace=True)
     data_tracks.drop('time_signature', axis=1, inplace=True)
+    return data_tracks
+
 
 def save_data(data_tracks, filename):
     data_tracks_to_save = data_tracks[data_tracks['genre'].map(
@@ -126,17 +129,18 @@ def plot_data(saved_data_tracks):
 
 
 def main():
-    complex = False
-    if sys.argv[1] == "-c":
-        complex = True
+    is_complex = False
+    if len(sys.argv) > 1 and sys.argv[1] == "-c":
+        is_complex = True
     data_artists, data_tracks = load_data()
     genre_counts, track_counts = prepare_data(data_artists, data_tracks)
     genre_counts = bucket_genres(genre_counts)
     data_tracks = clean_data(data_tracks)
-    if complex:
+    if is_complex:
         data_tracks = add_genres_to_tracks_complex(
             data_artists, data_tracks, genre_counts, track_counts)
-        saved_data_tracks = save_data(data_tracks, 'prepared_track_data_complex.jsonl')
+        saved_data_tracks = save_data(
+            data_tracks, 'prepared_track_data_complex.jsonl')
     else:
         data_tracks = add_genres_to_tracks(
             data_artists, data_tracks, genre_counts, track_counts)
