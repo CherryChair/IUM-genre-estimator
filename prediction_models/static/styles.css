@@ -53,7 +53,16 @@ form button {
 }
 
 #model-choice {
-    width: 50%;
-    margin: 1px auto;
-    text-align: left;
+    margin: 20px 0;
+    text-align: center;
+}
+
+#model-choice select {
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+#model-choice label {
+    font-weight: bold;
+    margin-right: 10px;
 }

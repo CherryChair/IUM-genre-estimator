@@ -56,7 +56,7 @@ def add_genres_to_tracks(data_artists, data_tracks, genre_counts, track_counts):
         for artist_genre in artist_genres:
             bucket_genres.append(genre_counts[artist_genre])
         counter_bucket = Counter(bucket_genres)
-        most_frequent, count = counter_bucket.most_common(1)[0]
+        most_frequent, _ = counter_bucket.most_common(1)[0]
         if genre_in_bucket(most_frequent):
             data_tracks.loc[index, "genre"] = most_frequent
     return data_tracks

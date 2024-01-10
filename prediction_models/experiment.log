@@ -1,0 +1,13 @@
+2024-01-10 21:20:48,474 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-01-10 21:20:48,475 - [33mPress CTRL+C to quit[0m
+2024-01-10 21:20:50,949 - Artist ID: 6EN9LJHqoZG0mgxLve, No songs found
+2024-01-10 21:20:50,950 - 127.0.0.1 - - [10/Jan/2024 21:20:50] "[33mGET /predict-complex/artist/6EN9LJHqoZG0mgxLve HTTP/1.1[0m" 404 -
+2024-01-10 21:20:56,441 - [ModelB_track] Input: [2.0, 2002, 0.0, 0.62, 0.44, 0.4, 123543.0, 0], Prediction: ['pop', 'folk']
+2024-01-10 21:20:56,442 - 127.0.0.1 - - [10/Jan/2024 21:20:56] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 21:20:59,494 - [ModelB_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: ['electronic', 'folk']
+2024-01-10 21:20:59,495 - 127.0.0.1 - - [10/Jan/2024 21:20:59] "GET /predict-complex/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 21:21:02,259 - [ModelA_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: electronic
+2024-01-10 21:21:02,260 - 127.0.0.1 - - [10/Jan/2024 21:21:02] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 21:21:03,960 - [ModelA_track] Input: [2.0, 2002, 0.0, 0.62, 0.44, 0.4, 123543.0, 0], Prediction: ['pop']
+2024-01-10 21:21:03,961 - 127.0.0.1 - - [10/Jan/2024 21:21:03] "POST /predict HTTP/1.1" 200 -
