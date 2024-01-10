@@ -11,3 +11,92 @@
 2024-01-10 21:21:02,260 - 127.0.0.1 - - [10/Jan/2024 21:21:02] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
 2024-01-10 21:21:03,960 - [ModelA_track] Input: [2.0, 2002, 0.0, 0.62, 0.44, 0.4, 123543.0, 0], Prediction: ['pop']
 2024-01-10 21:21:03,961 - 127.0.0.1 - - [10/Jan/2024 21:21:03] "POST /predict HTTP/1.1" 200 -
+2024-01-10 21:34:01,754 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-01-10 21:34:01,756 - [33mPress CTRL+C to quit[0m
+2024-01-10 21:41:09,717 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 21:41:09,719 - 127.0.0.1 - - [10/Jan/2024 21:41:09] "POST /predict HTTP/1.1" 200 -
+2024-01-10 21:41:09,741 - Artist ID: 1, No songs found
+2024-01-10 21:41:09,743 - 127.0.0.1 - - [10/Jan/2024 21:41:09] "[33mGET /predict/artist/1 HTTP/1.1[0m" 404 -
+2024-01-10 21:41:15,566 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 21:41:15,567 - 127.0.0.1 - - [10/Jan/2024 21:41:15] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 21:41:15,581 - Artist ID: 1, No songs found
+2024-01-10 21:41:15,582 - 127.0.0.1 - - [10/Jan/2024 21:41:15] "[33mGET /predict-complex/artist/1 HTTP/1.1[0m" 404 -
+2024-01-10 21:42:10,159 - 127.0.0.1 - - [10/Jan/2024 21:42:10] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 21:42:40,515 - 127.0.0.1 - - [10/Jan/2024 21:42:40] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 21:43:18,957 - 127.0.0.1 - - [10/Jan/2024 21:43:18] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 21:44:02,157 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 21:44:02,157 - 127.0.0.1 - - [10/Jan/2024 21:44:02] "POST /predict HTTP/1.1" 200 -
+2024-01-10 21:44:02,172 - Artist ID: 1, No songs found
+2024-01-10 21:44:02,173 - 127.0.0.1 - - [10/Jan/2024 21:44:02] "[33mGET /predict/artist/1 HTTP/1.1[0m" 404 -
+2024-01-10 21:44:08,044 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 21:44:08,045 - 127.0.0.1 - - [10/Jan/2024 21:44:08] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 21:44:08,062 - Artist ID: 1, No songs found
+2024-01-10 21:44:08,062 - 127.0.0.1 - - [10/Jan/2024 21:44:08] "[33mGET /predict-complex/artist/1 HTTP/1.1[0m" 404 -
+2024-01-10 21:44:30,700 - 127.0.0.1 - - [10/Jan/2024 21:44:30] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 21:44:51,603 - 127.0.0.1 - - [10/Jan/2024 21:44:51] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 21:45:29,406 - 127.0.0.1 - - [10/Jan/2024 21:45:29] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 21:45:29,423 - 127.0.0.1 - - [10/Jan/2024 21:45:29] "GET / HTTP/1.1" 200 -
+2024-01-10 21:56:03,374 - 127.0.0.1 - - [10/Jan/2024 21:56:03] "GET / HTTP/1.1" 200 -
+2024-01-10 21:56:21,433 - 127.0.0.1 - - [10/Jan/2024 21:56:21] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 21:56:40,725 - 127.0.0.1 - - [10/Jan/2024 21:56:40] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 21:57:17,567 - 127.0.0.1 - - [10/Jan/2024 21:57:17] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 21:57:17,597 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 21:57:17,598 - 127.0.0.1 - - [10/Jan/2024 21:57:17] "POST /predict HTTP/1.1" 200 -
+2024-01-10 21:57:17,634 - [ModelA_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: electronic
+2024-01-10 21:57:17,634 - 127.0.0.1 - - [10/Jan/2024 21:57:17] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 21:57:18,079 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 21:57:18,079 - 127.0.0.1 - - [10/Jan/2024 21:57:18] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 21:57:18,109 - [ModelB_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: ['electronic', 'folk']
+2024-01-10 21:57:18,109 - 127.0.0.1 - - [10/Jan/2024 21:57:18] "GET /predict-complex/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 21:59:57,002 - 127.0.0.1 - - [10/Jan/2024 21:59:57] "GET / HTTP/1.1" 200 -
+2024-01-10 22:00:14,013 - 127.0.0.1 - - [10/Jan/2024 22:00:14] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 22:00:32,148 - 127.0.0.1 - - [10/Jan/2024 22:00:32] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 22:01:09,861 - 127.0.0.1 - - [10/Jan/2024 22:01:09] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 22:01:09,887 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 22:01:09,888 - 127.0.0.1 - - [10/Jan/2024 22:01:09] "POST /predict HTTP/1.1" 200 -
+2024-01-10 22:01:09,927 - [ModelA_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: electronic
+2024-01-10 22:01:09,927 - 127.0.0.1 - - [10/Jan/2024 22:01:09] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:01:10,570 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 22:01:10,571 - 127.0.0.1 - - [10/Jan/2024 22:01:10] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 22:01:10,652 - [ModelB_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: ['electronic', 'folk']
+2024-01-10 22:01:10,653 - 127.0.0.1 - - [10/Jan/2024 22:01:10] "GET /predict-complex/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:07:04,822 - 127.0.0.1 - - [10/Jan/2024 22:07:04] "GET / HTTP/1.1" 200 -
+2024-01-10 22:07:24,221 - 127.0.0.1 - - [10/Jan/2024 22:07:24] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 22:07:44,223 - 127.0.0.1 - - [10/Jan/2024 22:07:44] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 22:08:24,728 - 127.0.0.1 - - [10/Jan/2024 22:08:24] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 22:08:24,754 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 22:08:24,754 - 127.0.0.1 - - [10/Jan/2024 22:08:24] "POST /predict HTTP/1.1" 200 -
+2024-01-10 22:08:24,786 - [ModelA_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: electronic
+2024-01-10 22:08:24,786 - 127.0.0.1 - - [10/Jan/2024 22:08:24] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:08:24,820 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 22:08:24,821 - 127.0.0.1 - - [10/Jan/2024 22:08:24] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 22:08:24,850 - [ModelB_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: ['electronic', 'folk']
+2024-01-10 22:08:24,850 - 127.0.0.1 - - [10/Jan/2024 22:08:24] "GET /predict-complex/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:10:58,670 - 127.0.0.1 - - [10/Jan/2024 22:10:58] "GET / HTTP/1.1" 200 -
+2024-01-10 22:11:38,607 - 127.0.0.1 - - [10/Jan/2024 22:11:38] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 22:12:19,075 - 127.0.0.1 - - [10/Jan/2024 22:12:19] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 22:13:41,707 - 127.0.0.1 - - [10/Jan/2024 22:13:41] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 22:13:41,757 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 22:13:41,760 - 127.0.0.1 - - [10/Jan/2024 22:13:41] "POST /predict HTTP/1.1" 200 -
+2024-01-10 22:13:41,820 - [ModelA_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: electronic
+2024-01-10 22:13:41,821 - 127.0.0.1 - - [10/Jan/2024 22:13:41] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:13:41,851 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 22:13:41,852 - 127.0.0.1 - - [10/Jan/2024 22:13:41] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 22:13:41,934 - [ModelB_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: ['electronic', 'folk']
+2024-01-10 22:13:41,936 - 127.0.0.1 - - [10/Jan/2024 22:13:41] "GET /predict-complex/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:25:13,289 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-01-10 22:25:13,289 - [33mPress CTRL+C to quit[0m
+2024-01-10 22:25:29,633 - 127.0.0.1 - - [10/Jan/2024 22:25:29] "GET / HTTP/1.1" 200 -
+2024-01-10 22:25:53,660 - 127.0.0.1 - - [10/Jan/2024 22:25:53] "GET /artist/report HTTP/1.1" 200 -
+2024-01-10 22:26:12,577 - 127.0.0.1 - - [10/Jan/2024 22:26:12] "GET /artist/report-complex HTTP/1.1" 200 -
+2024-01-10 22:26:43,364 - 127.0.0.1 - - [10/Jan/2024 22:26:43] "GET /artist/report-compare HTTP/1.1" 200 -
+2024-01-10 22:26:43,383 - [ModelA_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['hip hop']
+2024-01-10 22:26:43,384 - 127.0.0.1 - - [10/Jan/2024 22:26:43] "POST /predict HTTP/1.1" 200 -
+2024-01-10 22:26:43,411 - [ModelA_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: electronic
+2024-01-10 22:26:43,412 - 127.0.0.1 - - [10/Jan/2024 22:26:43] "GET /predict/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -
+2024-01-10 22:26:43,428 - [ModelB_track] Input: [30.0, 2020, 0.3, 0.3, 0.3, 0.3, 300000.0, 0], Prediction: ['pop', 'hip hop']
+2024-01-10 22:26:43,428 - 127.0.0.1 - - [10/Jan/2024 22:26:43] "POST /predict-complex HTTP/1.1" 200 -
+2024-01-10 22:26:43,455 - [ModelB_artist] Input: 6EN9LJHqoZG0mgxLvedhcA, Prediction: ['electronic', 'folk']
+2024-01-10 22:26:43,456 - 127.0.0.1 - - [10/Jan/2024 22:26:43] "GET /predict-complex/artist/6EN9LJHqoZG0mgxLvedhcA HTTP/1.1" 200 -

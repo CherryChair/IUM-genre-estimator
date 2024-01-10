@@ -18,3 +18,8 @@ Aplikację uruchamiamy z folderu w którym rozpakowane zostało archiwum, nadrz�
 ```bash
 python prediction_models/app.py
 ```
+Aby uruchomić testy należy wpisać
+```bash
+pytest
+```
+w folderze, w którym znajduje się plik test_app.py
