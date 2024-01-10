@@ -2,6 +2,8 @@ import pytest
 import requests
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+import sys
+sys.path.insert(0, 'prediction_models')
 from app import (
     prepare_data, train_model, evaluate_model, load_data)
 
