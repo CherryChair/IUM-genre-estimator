@@ -156,12 +156,12 @@
           })
           .then((response) => response.json())
           .then((data) => {
-            if (data?.genres) {
+            if (data?.genre) {
               document.getElementById("prediction-result").textContent =
-              "Predicted Genres: " + data.genres[0] + ", " + data.genres[1];
+              "Predicted Genre: " + data.genre;
             } else {
               document.getElementById("prediction-result").textContent =
-              "Error: Could not predict genres";
+              "Error: Could not predict genre";
             }
           })
           .catch((error) => console.error("Error:", error));
@@ -193,12 +193,12 @@
           fetch("/predict-complex/artist/" + artistId)
             .then((response) => response.json())
             .then((data) => {
-              if (data?.genres) {
+              if (data?.genre) {
                 document.getElementById("prediction-result").textContent =
-                  "Predicted Genres for Artist: " + data.genres[0] + ", " + data.genres[1];
+                  "Predicted Genre for Artist: "  + data.genre;
               } else {
                 document.getElementById("prediction-result").textContent =
-                  "Error: Could not predict genres for artist. Check artist ID.";
+                  "Error: Could not predict genre for artist. Check artist ID.";
               }
             })
             .catch((error) => console.error("Error:", error));
