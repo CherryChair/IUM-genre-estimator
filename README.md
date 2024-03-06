@@ -1,3 +1,6 @@
+## Zrzuty ekranu z aplikacji
+[![image1.png](https://i.postimg.cc/sDpXwsHx/image1.png)](https://postimg.cc/gn2m0FWb)
+## Uruchamianie
 Środowisko: `Python 3.9.2`
 Wymagane wersje bibliotek znajdują się w requirements.txt. Instalacja:
 ```bash
