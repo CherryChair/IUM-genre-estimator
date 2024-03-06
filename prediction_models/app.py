@@ -5,12 +5,17 @@ import logging
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import pickle
+from numpy.random import RandomState, SeedSequence
+
+
 
 logging.basicConfig(filename='experiment.log', level=logging.INFO,
                     format='%(asctime)s - %(message)s')
 app = Flask(__name__)
 
+SEED = 789456123
 
 def load_data():
     df_tracks = pd.read_json('prepared_track_data.jsonl', lines=True)
@@ -31,14 +36,18 @@ def prepare_data(df_tracks):
     return x_train, x_test, y_train, y_test, features
 
 
-def train_model(x_train, y_train, n_estimators):
-    model = RandomForestClassifier(n_estimators=n_estimators)
+def train_model(x_train, y_train, n_estimators, max_depth, random_state):
+    model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state= random_state)
     model.fit(x_train, y_train)
     return model
 
+def train_complex_model(x_train, y_train, n_neighbors, weights, p):
+    model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights, p=p)
+    model.fit(x_train, y_train)
+    return model
 
 def evaluate_model(model, x_test, y_test):
-    y_pred = model.predict(x_test)
+    y_pred = model.predict(x_test,)
     return classification_report(y_test, y_pred)
 
 
@@ -68,10 +77,10 @@ def predict_complex():
                       data['speechiness']), float(data['valence']),
                   float(data['duration_ms']), int(data['explicit'])]
     prediction_probablities = model_complex.predict_proba([input_data])
-    two_most_probable = np.argsort(prediction_probablities[0])[::-1][:2]
-    genres = [model_complex.classes_[index] for index in two_most_probable]
-    logging.info(f'[ModelB_track] Input: {input_data}, Prediction: {genres}')
-    return jsonify({'genres': genres})
+    two_most_probable = np.argsort(prediction_probablities[0])[-1]
+    genre =  model_complex.classes_[prediction_probablities.argmax()]
+    logging.info(f'[ModelB_track] Input: {input_data}, Prediction: {genre}')
+    return jsonify({'genre': genre})
 
 
 @app.route('/predict/artist/<id_artist>', methods=['GET'])
@@ -105,7 +114,7 @@ def predict_artist_complex(id_artist):
     if prediction is not None:
         logging.info(
             f'[ModelB_artist] Input: {id_artist}, Prediction: {prediction}')
-        return jsonify({'genres': prediction})
+        return jsonify({'genre': prediction})
     else:
         logging.info(f'Artist ID: {id_artist}, No songs found')
         return jsonify({'error': 'No songs found for this artist'}), 404
@@ -117,9 +126,8 @@ def complex_predict_artist(model_complex, id_artist):
         song_features = artist_songs[features]
         genre_probabilities = model_complex.predict_proba(song_features)
         average_probabilities = genre_probabilities.mean(axis=0)
-        two_most_probable = np.argsort(average_probabilities)[::-1][:2]
-        genres = [model_complex.classes_[index] for index in two_most_probable]
-        return genres
+        genre =  model_complex.classes_[average_probabilities.argmax()]
+        return genre
     else:
         return None
 
@@ -127,7 +135,7 @@ def complex_predict_artist(model_complex, id_artist):
 @app.route('/artist/report', methods=['GET'])
 def get_artists_report():
     _, df_artists_test = train_test_split(
-        df_artists, test_size=0.05)
+        df_artists, test_size=0.05, random_state= SEED)
 
     y_true = []
     y_pred = []
@@ -144,58 +152,18 @@ def get_artists_report():
 @app.route('/artist/report-complex', methods=['GET'])
 def get_artists_report_complex():
     _, df_artists_test = train_test_split(
-        df_artists, test_size=0.05)
+        df_artists, test_size=0.05, random_state=SEED)
 
     y_true = []
     y_pred = []
     for _, artist in df_artists_test.iterrows():
-        prediction = complex_predict_artist(model_complex, artist['id'])
+        prediction = complex_predict_artist(model_complex, artist["id"])
         if prediction is not None:
             y_true.append(artist['genre'])
             y_pred.append(prediction)
-    return my_classification_report_complex(y_true, y_pred)
-
-
-def my_classification_report_complex(y_true, y_pred):
-    genre_scores = dict()
-    full_positives = 0
-    partial_positives = 0
-    full_negatives = 0
-    for genres_true, genres_predicted in zip(y_true, y_pred):
-        positives = 0
-        for genre_predicted in genres_predicted:
-            if genre_predicted in genres_true:
-                positives += 1
-                if genre_predicted not in genre_scores:
-                    genre_scores[genre_predicted] = {
-                        "true_positive": 1, "false_positive": 0}
-                else:
-                    genre_scores[genre_predicted]["true_positive"] += 1
-            else:
-                if genre_predicted not in genre_scores:
-                    genre_scores[genre_predicted] = {
-                        "true_positive": 0, "false_positive": 1}
-                else:
-                    genre_scores[genre_predicted]["false_positive"] += 1
-        if positives == 2:
-            full_positives += 1
-        elif positives == 1:
-            partial_positives += 1
-        else:
-            full_negatives += 1
-    report = dict()
-    macro_avg_precision = 0
-    for key, item in genre_scores.items():
-        precision = item["true_positive"] / \
-            (item["true_positive"]+item["false_positive"])
-        report[key] = {"precision": precision}
-        macro_avg_precision += precision
-    macro_avg_precision /= len(report.keys())
-    report["macro_avg_precision"] = {"precision": macro_avg_precision}
+    report = classification_report(y_true, y_pred)
     print(report)
-    print(
-        f"full_positives: {full_positives}, partial_positives: {partial_positives}, full_negatives: {full_negatives}")
-    return jsonify({'precision_report': report, "full_positives": full_positives, "partial_positives": partial_positives, "full_negatives": full_negatives})
+    return jsonify({'classification_report': report})
 
 
 @app.route('/artist/report-compare', methods=['GET'])
@@ -220,14 +188,14 @@ def get_artists_report_compare():
 def compare_models(y_true, y_pred_simple, y_pred_complex):
     report = {"true_complex": {"true_simple": 0, "false_simple": 0},
               "false_complex": {"true_simple": 0, "false_simple": 0}}
-    for genre_true, genre_predicted_simple, genres_predicted_complex in zip(y_true, y_pred_simple, y_pred_complex):
+    for genre_true, genre_predicted_simple, genre_predicted_complex in zip(y_true, y_pred_simple, y_pred_complex):
         if genre_true == genre_predicted_simple:
-            if genre_predicted_simple in genres_predicted_complex:
+            if genre_predicted_simple == genre_predicted_complex:
                 report["true_complex"]["true_simple"] += 1
             else:
                 report["false_complex"]["true_simple"] += 1
         else:
-            if genre_true in genres_predicted_complex:
+            if genre_true == genre_predicted_complex:
                 report["true_complex"]["false_simple"] += 1
             else:
                 report["false_complex"]["false_simple"] += 1
